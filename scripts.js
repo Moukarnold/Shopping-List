@@ -2,6 +2,7 @@ const itemForm = document.getElementById("item-form");
 const itemInput = document.getElementById("item-input");
 const itemList = document.getElementById("item-list");
 const clearBtn = document.getElementById("clear");
+const  itemFilter = document.getElementById("filter");
 
 function addItem(e){
    e.preventDefault();
@@ -22,7 +23,8 @@ function addItem(e){
 
       // append the input item to the list
       itemList.appendChild(li);
-
+         
+      checkUI();
 }
     // create a button with his classes particulaties
     function createButton(classes){
@@ -48,14 +50,32 @@ function removeItem(e){
    if(clickedElement.classList.contains("remove-item")){
      const listItem = clickedElement.parentElement.parentElement;
      listItem.remove();
-   }
-
+    
+    }
+    checkUI();
 }
+   
+
+
 
 function clearItems(){
     while (itemList.firstChild) {
         itemList.removeChild(itemList.firstChild);
 }
+checkUI();
+}
+
+function checkUI(){
+    const items= itemList.querySelectorAll("li");
+
+     if(items.length===0){
+         clearBtn.style.display= "none";
+         itemFilter.style.display= "none";
+     }
+     else{
+        clearBtn.style.display= "block";
+        itemFilter.style.display= "block";
+    }
 }
 
 itemForm.addEventListener("submit", addItem);
