@@ -4,7 +4,7 @@ const itemList = document.getElementById("item-list");
 const clearBtn = document.getElementById("clear");
 const  itemFilter = document.getElementById("filter");
 
-function addItem(e){
+function OnAddItemSubmit(e){
    e.preventDefault();
      
     const newItem = itemInput.value;
@@ -13,19 +13,15 @@ function addItem(e){
         alert(" gibt was ein");
         return;
     }
-        // create a list item
-    const li = document.createElement("li");
-    const textNode = document.createTextNode(newItem);
-    li.appendChild(textNode);
-
-      const button = createButton ("remove-item btn-link text-red");
-      li.appendChild(button);
-
-      // append the input item to the list
-      itemList.appendChild(li);
+    // add item dom elemt
+    addItemToDom(newItem);
          
+    // add item to local storage 
+    addItemToStorage(newItem)
+
       checkUI();
 }
+
     // create a button with his classes particulaties
     function createButton(classes){
     const button= document.createElement("button");
@@ -90,13 +86,66 @@ items.forEach((item)=>{
 
 }
 
+function displayItems(){
+   const itemsFromStorage=  getItemFromStorage();
+   itemsFromStorage.forEach((item)=> addItemToDom(item));
+   checkUI();
+}
+
+function addItemToDom(item){
+    const li = document.createElement("li");
+    const textNode = document.createTextNode(item);
+    li.appendChild(textNode);
+
+      const button = createButton ("remove-item btn-link text-red");
+      li.appendChild(button);
+
+      // append the input item to the list
+      itemList.appendChild(li);
+};
+
+function getItemFromStorage(){
+    let itemsFromStorage;
+   let FromStorage  = localStorage.getItem("items");
+
+  if (FromStorage === null){
+    itemsFromStorage=[];
+  } else {
+    itemsFromStorage= JSON.parse(FromStorage);
+  }
+ return itemsFromStorage;
+}
 
 
-itemForm.addEventListener("submit", addItem);
+
+function addItemToStorage(item){
+    const itemsFromStorage = getItemFromStorage();
+   let FromStorage  = localStorage.getItem("items");
+
+  if (FromStorage === null){
+    itemsFromStorage=[];
+  } else {
+    itemsFromStorage= JSON.parse(FromStorage);
+  }
+  itemsFromStorage.push(item);
+
+  // convert to json string and set to local sotrage
+
+  localStorage.setItem("items", JSON.stringify(itemsFromStorage));
+}
+
+
+// initialize app
+
+function init (){
+itemForm.addEventListener("submit", OnAddItemSubmit);
 itemList.addEventListener("click", removeItem);
 clearBtn.addEventListener("click", clearItems);
 itemFilter.addEventListener("input", filterItem);
+document.addEventListener("DOMContentLoaded", displayItems);
 
+checkUI();
+}
 
    
 
