@@ -32,6 +32,11 @@ function OnAddItemSubmit(e) {
         itemToEdit.remove();
         isEditMode= false;
 
+      } else {
+        if ( checkIfItemExist(newItem)){
+            alert(" that item already exists");
+            return;
+        }
       }
 
 
@@ -125,6 +130,18 @@ function checkUI() {
   formBtn.style.backgroundColor= "#333";
     isEditMode= false;
     
+}
+
+function checkIfItemExist(item){
+   const itemsFromStorage= getItemsFromStorage();
+     let  ifItemExist = itemsFromStorage.includes(item);
+    if( ifItemExist){
+       return true;
+    } else{
+       return false;
+    }
+
+
 }
 
 // Filter items in the list
